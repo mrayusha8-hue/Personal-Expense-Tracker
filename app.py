@@ -57,7 +57,7 @@ total_transactions = filtered_df.shape[0]  #len(df) can be used
 
 # Create 4 columns
 col1, col2, col3, col4, col5 = st.columns(5)
-
+left, right = st.column(2)
 # Adding KPI card within respective column
 with col1:
     st.metric(
@@ -113,7 +113,7 @@ if not filtered_df.empty:
 
     #Show plot
     st.pyplot(fig)
-    st.divider()
+   
 else:
     st.warning("No data available.")
     
