@@ -57,7 +57,7 @@ total_transactions = filtered_df.shape[0]  #len(df) can be used
 
 # Create 4 columns
 col1, col2, col3, col4, col5 = st.columns(5)
-left, right = st.column(2)
+    
 # Adding KPI card within respective column
 with col1:
     st.metric(
@@ -92,48 +92,39 @@ with col5:
 )
 st.divider()
 
+# Side-by-side comparison section
+st.header("📊 Expense Comparison")
 
-
-
-#Monthly Expense Section
-st.header("📈 Monthly Expense Trend")
 if not filtered_df.empty:
-    # Group by month and calculate total expense
+    # Monthly Expense
     monthly_expense = filtered_df.groupby("Month")["Amount"].sum()
-
-    #Create plot
-    fig, ax = plt.subplots(figsize=(7,5))
-    ax.bar(monthly_expense.index, monthly_expense.values, color="blue")    #error encountered as month is not numeric value
-    ax.set_title("Monthly Expenses")
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Amount(₹)")
-    plt.xticks(rotation=45) 
-    ax.grid(True, axis="y", linestyle="--", alpha=0.7)  
+    fig1, ax1 = plt.subplots(figsize=(7,5))
+    ax1.bar(monthly_expense.index, monthly_expense.values, color="steelblue")
+    ax1.set_title("Monthly Expenses")
+    ax1.set_xlabel("Month")
+    ax1.set_ylabel("Amount (₹)")
+    plt.xticks(rotation=45)
+    ax1.grid(True, axis="y", linestyle="--", alpha=0.7)
     plt.tight_layout()
 
-    #Show plot
-    st.pyplot(fig)
-   
-else:
-    st.warning("No data available.")
-    
-#Categort wise Expense
-st.header("📂 Category-wise Expenses")
-if not filtered_df.empty:
-    #Group by category and calculate total expense
-    category_wise_expense = filtered_df.groupby("Category")["Amount"].sum()
-
-    # Create the plot
-    fig, ax = plt.subplots(figsize = (15,7))
-    ax.bar(category_wise_expense.index,category_wise_expense.values, color = "blue" )
-    ax.set_title("Toral spending by category")
-    ax.set_xlabel("Category")
-    ax.set_ylabel("Amount(₹)")
-    ax.grid(True, axis="y", linestyle="--", alpha=0.7)  
+    # Category-wise Expense
+    category_expense = filtered_df.groupby("Category")["Amount"].sum()
+    fig2, ax2 = plt.subplots(figsize=(7,5))
+    ax2.bar(category_expense.index, category_expense.values, color="seagreen")
+    ax2.set_title("Category-wise Expenses")
+    ax2.set_xlabel("Category")
+    ax2.set_ylabel("Amount (₹)")
+    ax2.grid(True, axis="y", linestyle="--", alpha=0.7)
+    plt.xticks(rotation=45)
     plt.tight_layout()
 
-    #Show plot
-    st.pyplot(fig)
+    # Display both charts side by side
+    colA, colB = st.columns(2)
+    with colA:
+        st.pyplot(fig1)
+    with colB:
+        st.pyplot(fig2)
+
 else:
     st.warning("No data available.")
 
@@ -147,11 +138,11 @@ if not filtered_df.empty:
     category_wise_expense = filtered_df.groupby("Category")["Amount"].sum()
 
     # Create the plot
-    fig, ax = plt.subplots(figsize=(12,7))
-    ax.pie( category_wise_expense, labels=category_wise_expense.index, autopct='%1.1f%%', startangle=90)
-    ax.set_title("Percentage of Spending Category")
+    fig, ax = plt.subplots(figsize=(4,3))
+    ax.pie( category_wise_expense, labels=category_wise_expense.index, autopct='%1.1f%%', startangle=90, textprops={'fontsize':4})
     plt.tight_layout()
-
+   
+    ax.set_title("Percentage of Spending Category", fontsize=6)
     #Show plot
     st.pyplot(fig)
 else:
